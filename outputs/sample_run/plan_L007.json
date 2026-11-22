@@ -1,0 +1,47 @@
+{
+  "blocking": [],
+  "crm_version": 1,
+  "decision": "assign",
+  "executable": true,
+  "lead_id": "L007",
+  "ops": [
+    {
+      "lead_id": "L007",
+      "op": "update_lead",
+      "set": {
+        "lead_status": "Assigned",
+        "owner_id": "rep.na.mm.1"
+      }
+    },
+    {
+      "body": "Sales Ops Manager at Harbourline Logistics (synthetic) (MM, NA). Asked about: no clear ask.",
+      "due": "2026-11-23",
+      "lead_id": "L007",
+      "op": "create_task",
+      "owner_id": "rep.na.mm.1",
+      "subject": "Follow up inbound lead L007"
+    },
+    {
+      "channel": "#lead-routing-mock",
+      "lead_id": "L007",
+      "op": "slack_notify",
+      "text": "[mock] L007 -> rep.na.mm.1 (R05_TERRITORY_NA_MM, score 55). Sales Ops Manager at Harbourline Logistics (synthetic) (MM, NA). Asked about: no clear ask."
+    }
+  ],
+  "owner_id": "rep.na.mm.1",
+  "plan_hash": "cd4fa14b5f92cba6729af3b5b17180525057710e0b4cab7f84d58fb227588575",
+  "rule": "R05_TERRITORY_NA_MM",
+  "rules_version": "routing-rules.v1",
+  "schema": "plan.v1",
+  "score": 55,
+  "score_reasons": [
+    "mid-market size +25",
+    "known account +15",
+    "source web_form +15"
+  ],
+  "summary_source": "template",
+  "warnings": [
+    "quarantined:message:override_instructions",
+    "quarantined:message:routing_instruction"
+  ]
+}

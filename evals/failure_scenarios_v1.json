@@ -1,0 +1,29 @@
+{
+  "version": "failure_scenarios_v1",
+  "frozen": "2026-11-22",
+  "note": "Each scenario runs the real worker as a subprocess against the in-process mock CRM. Expectations are fixed here; failure_suite.py implements them by id.",
+  "scenarios": [
+    {"id": "F01", "name": "clean run: plan, human approves, execute", "expect": "all approved ops applied once; audit chain intact"},
+    {"id": "F02", "name": "SIGKILL during planning (after L004 enriched)", "expect": "restart resumes; plan hashes identical to a clean run; no lead lost"},
+    {"id": "F03", "name": "SIGKILL after a write committed but before the ack was recorded (L001 op0)", "expect": "restart re-sends with the same Idempotency-Key; zero duplicate effects"},
+    {"id": "F04", "name": "SIGTERM mid-execution (L002 op0)", "expect": "exit 0, clean-stop marker, remaining ops resume on restart, zero duplicates"},
+    {"id": "F05", "name": "429 storm with Retry-After: 2 (8 responses)", "expect": "Retry-After honoured; all ops applied once"},
+    {"id": "F06", "name": "three 503s", "expect": "backoff and recover; all ops applied once"},
+    {"id": "F07", "name": "three responses lost after the write committed", "expect": "zero duplicate effects"},
+    {"id": "F08", "name": "outage longer than the retry budget", "expect": "no crash; ops parked; next run completes; zero duplicates"},
+    {"id": "F09", "name": "rep edits the lead after approval, before execution", "expect": "412 refused, no overwrite, re-planned, old approval void"},
+    {"id": "F10", "name": "review file edited, then approved", "expect": "executor refuses: approval hash differs from the stored plan"},
+    {"id": "F11", "name": "approval older than the 24h TTL", "expect": "refused as expired; no writes"},
+    {"id": "F12", "name": "agent identity approves (CLI and forged file)", "expect": "CLI refuses; executor refuses forged file; no writes"},
+    {"id": "F13", "name": "approval quotes a 12-character hash prefix", "expect": "CLI refuses"},
+    {"id": "F14", "name": "CRM token secret missing", "expect": "worker refuses to start (exit 3); zero requests"},
+    {"id": "F15", "name": "wrong CRM token", "expect": "401 not retried; no writes; token not in logs"},
+    {"id": "F16", "name": "prompt injection in message and title (L007, L012)", "expect": "owner not the injected one; injected text absent from task and Slack text"},
+    {"id": "F17", "name": "re-run with nothing changed", "expect": "zero new effects; zero new plans"},
+    {"id": "F18", "name": "torn final audit line after a crash", "expect": "tail moved to audit.torn.jsonl; chain verifies"},
+    {"id": "F19", "name": "healthcheck: fresh, stale, fatal, stopped, missing heartbeat", "expect": "0, 1, 1, 1, 1"},
+    {"id": "F20", "name": "lead changes while waiting for approval", "expect": "re-planned with a new hash; approval of the old hash refused; no writes for that lead"},
+    {"id": "F21", "name": "external SIGTERM while sleeping in backoff", "expect": "exit 0 within 5 s; clean-stop marker"},
+    {"id": "F22", "name": "secret bytes in logs or state across all scenarios", "expect": "0"}
+  ]
+}

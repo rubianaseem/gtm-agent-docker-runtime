@@ -1,0 +1,74 @@
+# Local stack: mock CRM + Slack service and the worker.
+# Nothing here talks to a real CRM or Slack workspace.
+# Create the secret files first: python tools/make_dev_secrets.py
+name: gtm-agent-docker-runtime
+
+services:
+  mock-crm:
+    build: .
+    image: gtm-agent-docker-runtime:1.0.0
+    command: ["mock", "--port", "8088"]
+    read_only: true
+    user: "10001:10001"
+    cap_drop:
+      - ALL
+    security_opt:
+      - "no-new-privileges:true"
+    secrets:
+      - crm_token
+    networks:
+      - gtm-internal
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - "-c"
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8088/health', timeout=3)"
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  worker:
+    image: gtm-agent-docker-runtime:1.0.0
+    command: ["run"]
+    depends_on:
+      mock-crm:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - "/tmp:size=16m"
+    user: "10001:10001"
+    cap_drop:
+      - ALL
+    security_opt:
+      - "no-new-privileges:true"
+    secrets:
+      - crm_token
+      - anthropic_api_key
+    environment:
+      CRM_BASE_URL: "http://mock-crm:8088"
+      STATE_DIR: "/data"
+      POLL_INTERVAL_S: "5"
+      WORKER_ID: "worker-1"
+    volumes:
+      - "agent-state:/data"
+    stop_grace_period: 30s
+    restart: unless-stopped
+    mem_limit: 256m
+    pids_limit: 64
+    networks:
+      - gtm-internal
+
+networks:
+  gtm-internal:
+    internal: true
+
+volumes:
+  agent-state: {}
+
+secrets:
+  crm_token:
+    file: ./secrets/crm_token.txt
+  anthropic_api_key:
+    file: ./secrets/anthropic_api_key.txt

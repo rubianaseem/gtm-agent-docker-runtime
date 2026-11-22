@@ -1,0 +1,14 @@
+# Synthetic naive compose file used as the lint baseline. Do not use.
+services:
+  mock-crm:
+    build: .
+    command: ["mock"]
+  worker:
+    build: .
+    command: ["run"]
+    environment:
+      CRM_TOKEN: "dev-token-123"
+      ANTHROPIC_API_KEY: "sk-canary-not-a-real-key-0000000000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    stop_grace_period: 1s

@@ -1,0 +1,8 @@
+# Synthetic "first attempt" Dockerfile used as the lint baseline. Do not use.
+FROM python:latest
+ARG CRM_TOKEN
+ENV ANTHROPIC_API_KEY=sk-canary-not-a-real-key-0000000000
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+ENTRYPOINT python -m runtime run

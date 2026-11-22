@@ -1,0 +1,17 @@
+{
+  "_note": "Synthetic reps (fictional names), same territory model as gtm-agent-langfuse-tracing.",
+  "reps": [
+    {"id": "rep.uk.smb.1", "name": "Priya Nair (synthetic)", "segment": "SMB", "territory": "UK", "active": true},
+    {"id": "rep.uk.smb.2", "name": "Tom Hughes (synthetic)", "segment": "SMB", "territory": "UK", "active": true},
+    {"id": "rep.uk.mm.1", "name": "Aisha Khan (synthetic)", "segment": "MM", "territory": "UK", "active": true},
+    {"id": "rep.uk.ent.1", "name": "Marcus Bell (synthetic)", "segment": "ENT", "territory": "UK", "active": true},
+    {"id": "rep.dach.smb.1", "name": "Jonas Weber (synthetic)", "segment": "SMB", "territory": "DACH", "active": true},
+    {"id": "rep.dach.mm.1", "name": "Lena Fischer (synthetic)", "segment": "MM", "territory": "DACH", "active": true},
+    {"id": "rep.dach.ent.1", "name": "Katrin Vogel (synthetic)", "segment": "ENT", "territory": "DACH", "active": false},
+    {"id": "rep.fr.smb.1", "name": "Hugo Martin (synthetic)", "segment": "SMB", "territory": "FR", "active": true},
+    {"id": "rep.fr.mm.1", "name": "Claire Dupont (synthetic)", "segment": "MM", "territory": "FR", "active": true},
+    {"id": "rep.na.smb.1", "name": "Dana Cole (synthetic)", "segment": "SMB", "territory": "NA", "active": true},
+    {"id": "rep.na.mm.1", "name": "Eli Brooks (synthetic)", "segment": "MM", "territory": "NA", "active": true},
+    {"id": "rep.na.ent.1", "name": "Sofia Reyes (synthetic)", "segment": "ENT", "territory": "NA", "active": true}
+  ]
+}

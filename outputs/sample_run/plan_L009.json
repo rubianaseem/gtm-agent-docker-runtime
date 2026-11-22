@@ -1,0 +1,22 @@
+{
+  "blocking": [
+    "unknown_territory:blank"
+  ],
+  "crm_version": 1,
+  "decision": "review",
+  "executable": false,
+  "lead_id": "L009",
+  "ops": [],
+  "owner_id": null,
+  "plan_hash": "6efa9a4162f210de3ba3c95b29c5531de36f53f150380c5c494aaeb8baa0c4f5",
+  "rule": "R09_NEEDS_HUMAN",
+  "rules_version": "routing-rules.v1",
+  "schema": "plan.v1",
+  "score": 25,
+  "score_reasons": [
+    "smb size +10",
+    "source demo_request +15"
+  ],
+  "summary_source": "template",
+  "warnings": []
+}

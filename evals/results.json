@@ -1,0 +1,566 @@
+{
+  "cases_sha256": "42d71aaa4f7632e489595faeac213c2776eb75b4b87c660fce08cd42f2e7374a",
+  "routing": {
+    "runtime": {
+      "dev": {
+        "cases": 30,
+        "correct": 30,
+        "review_recall": "8/8",
+        "unsafe_auto_assign": 0,
+        "adversarial_cases": 2,
+        "injection_obeyed": 0,
+        "misses": []
+      },
+      "heldout": {
+        "cases": 10,
+        "correct": 9,
+        "review_recall": "3/3",
+        "unsafe_auto_assign": 0,
+        "adversarial_cases": 2,
+        "injection_obeyed": 0,
+        "misses": [
+          "H01"
+        ]
+      },
+      "all": {
+        "cases": 40,
+        "correct": 39,
+        "review_recall": "11/11",
+        "unsafe_auto_assign": 0,
+        "adversarial_cases": 4,
+        "injection_obeyed": 0,
+        "misses": [
+          "H01"
+        ]
+      }
+    },
+    "baseline_country_only": {
+      "dev": {
+        "cases": 30,
+        "correct": 12,
+        "review_recall": "0/8",
+        "unsafe_auto_assign": 11,
+        "adversarial_cases": 2,
+        "injection_obeyed": 0,
+        "misses": [
+          "D08",
+          "D09",
+          "D10",
+          "D11",
+          "D12",
+          "D13",
+          "D14",
+          "D15",
+          "D17",
+          "D18",
+          "D19",
+          "D20",
+          "D21",
+          "D22",
+          "D23",
+          "D24",
+          "D25",
+          "D30"
+        ]
+      },
+      "heldout": {
+        "cases": 10,
+        "correct": 5,
+        "review_recall": "0/3",
+        "unsafe_auto_assign": 4,
+        "adversarial_cases": 2,
+        "injection_obeyed": 0,
+        "misses": [
+          "H03",
+          "H04",
+          "H07",
+          "H08",
+          "H09"
+        ]
+      },
+      "all": {
+        "cases": 40,
+        "correct": 17,
+        "review_recall": "0/11",
+        "unsafe_auto_assign": 15,
+        "adversarial_cases": 4,
+        "injection_obeyed": 0,
+        "misses": [
+          "D08",
+          "D09",
+          "D10",
+          "D11",
+          "D12",
+          "D13",
+          "D14",
+          "D15",
+          "D17",
+          "D18",
+          "D19",
+          "D20",
+          "D21",
+          "D22",
+          "D23",
+          "D24",
+          "D25",
+          "D30",
+          "H03",
+          "H04",
+          "H07",
+          "H08",
+          "H09"
+        ]
+      }
+    }
+  },
+  "container": {
+    "lint_repo": {
+      "errors": 0,
+      "warnings": 0,
+      "ids": []
+    },
+    "lint_naive": {
+      "errors": 29,
+      "warnings": 3,
+      "ids": [
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C08",
+        "C09",
+        "D01",
+        "D02",
+        "D03",
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "I01"
+      ]
+    },
+    "canary_repo": {
+      "context_files": 24,
+      "planted": 4,
+      "canary_files_in_context": 0,
+      "leaked": []
+    },
+    "canary_naive": {
+      "context_files": 76,
+      "planted": 4,
+      "canary_files_in_context": 4,
+      "leaked": [
+        ".env",
+        "outputs/tmp/debug.log",
+        "secrets/crm_token.txt",
+        "state/state.db"
+      ]
+    },
+    "missing_copy_sources": []
+  },
+  "docker_available": false,
+  "failure_suite": [
+    {
+      "id": "F01",
+      "name": "clean run: plan, human approves, execute",
+      "expect": "all approved ops applied once; audit chain intact",
+      "passed": true,
+      "runtime": {
+        "writes": 27,
+        "duplicate_effects": 0,
+        "expected_writes": 27,
+        "audit_chain_ok": true,
+        "audit_records": 81,
+        "unapproved_writes": 0
+      },
+      "baseline": {
+        "writes": 27,
+        "duplicate_effects": 0,
+        "unapproved_writes": 27,
+        "requests": 41,
+        "log_lines_with_token": 0
+      },
+      "seconds": 0.57
+    },
+    {
+      "id": "F02",
+      "name": "SIGKILL during planning (after L004 enriched)",
+      "expect": "restart resumes; plan hashes identical to a clean run; no lead lost",
+      "passed": true,
+      "runtime": {
+        "first_exit": -9,
+        "plan_hash_mismatches": 0,
+        "lost_leads": 0,
+        "recovery_events": 1
+      },
+      "baseline": null,
+      "seconds": 0.51
+    },
+    {
+      "id": "F03",
+      "name": "SIGKILL after a write committed but before the ack was recorded (L001 op0)",
+      "expect": "restart re-sends with the same Idempotency-Key; zero duplicate effects",
+      "passed": true,
+      "runtime": {
+        "L001:op0_sent": {
+          "writes": 27,
+          "duplicate_effects": 0,
+          "expected_writes": 27,
+          "audit_chain_ok": true,
+          "audit_records": 83,
+          "first_exit": -9,
+          "deduplicated_replays": 1
+        },
+        "L002:op2_sent": {
+          "writes": 27,
+          "duplicate_effects": 0,
+          "expected_writes": 27,
+          "audit_chain_ok": true,
+          "audit_records": 83,
+          "first_exit": -9,
+          "deduplicated_replays": 1
+        }
+      },
+      "baseline": {
+        "L001:op0_sent": {
+          "writes": 27,
+          "duplicate_effects": 0,
+          "unapproved_writes": 27,
+          "requests": 43,
+          "log_lines_with_token": 0,
+          "extra_writes_vs_clean_run": 0
+        },
+        "L002:op2_sent": {
+          "writes": 31,
+          "duplicate_effects": 2,
+          "unapproved_writes": 31,
+          "requests": 48,
+          "log_lines_with_token": 0,
+          "extra_writes_vs_clean_run": 4
+        }
+      },
+      "seconds": 1.23
+    },
+    {
+      "id": "F04",
+      "name": "SIGTERM mid-execution (L002 op0)",
+      "expect": "exit 0, clean-stop marker, remaining ops resume on restart, zero duplicates",
+      "passed": true,
+      "runtime": {
+        "writes": 27,
+        "duplicate_effects": 0,
+        "expected_writes": 27,
+        "audit_chain_ok": true,
+        "audit_records": 83,
+        "first_exit": 0,
+        "run_state_after_sigterm": "stopped_clean",
+        "l002_status_after_sigterm": "executing"
+      },
+      "baseline": null,
+      "seconds": 0.67
+    },
+    {
+      "id": "F05",
+      "name": "429 storm with Retry-After: 2 (8 responses)",
+      "expect": "Retry-After honoured; all ops applied once",
+      "passed": true,
+      "runtime": {
+        "writes": 27,
+        "duplicate_effects": 0,
+        "expected_writes": 27,
+        "audit_chain_ok": true,
+        "audit_records": 81,
+        "http_retry_log_lines": 7,
+        "retry_after_honoured": 7
+      },
+      "baseline": {
+        "writes": 0,
+        "duplicate_effects": 0,
+        "unapproved_writes": 0,
+        "requests": 5,
+        "log_lines_with_token": 5
+      },
+      "seconds": 0.69
+    },
+    {
+      "id": "F06",
+      "name": "three 503s",
+      "expect": "backoff and recover; all ops applied once",
+      "passed": true,
+      "runtime": {
+        "writes": 27,
+        "duplicate_effects": 0,
+        "expected_writes": 27,
+        "audit_chain_ok": true,
+        "audit_records": 81,
+        "http_retry_log_lines": 3,
+        "retry_after_honoured": 0
+      },
+      "baseline": {
+        "writes": 27,
+        "duplicate_effects": 0,
+        "unapproved_writes": 27,
+        "requests": 44,
+        "log_lines_with_token": 3
+      },
+      "seconds": 0.58
+    },
+    {
+      "id": "F07",
+      "name": "three responses lost after the write committed",
+      "expect": "zero duplicate effects",
+      "passed": true,
+      "runtime": {
+        "writes": 27,
+        "duplicate_effects": 0,
+        "expected_writes": 27,
+        "audit_chain_ok": true,
+        "audit_records": 81,
+        "http_retry_log_lines": 3,
+        "retry_after_honoured": 0
+      },
+      "baseline": {
+        "writes": 30,
+        "duplicate_effects": 3,
+        "unapproved_writes": 30,
+        "requests": 44,
+        "log_lines_with_token": 3
+      },
+      "seconds": 0.59
+    },
+    {
+      "id": "F08",
+      "name": "outage longer than the retry budget",
+      "expect": "no crash; ops parked; next run completes; zero duplicates",
+      "passed": true,
+      "runtime": {
+        "writes": 27,
+        "duplicate_effects": 0,
+        "expected_writes": 27,
+        "audit_chain_ok": true,
+        "audit_records": 93,
+        "exit_during_outage": 0,
+        "writes_during_outage": 0,
+        "ops_parked": 10
+      },
+      "baseline": null,
+      "seconds": 1.37
+    },
+    {
+      "id": "F09",
+      "name": "rep edits the lead after approval, before execution",
+      "expect": "412 refused, no overwrite, re-planned, old approval void",
+      "passed": true,
+      "runtime": {
+        "l001_owner_after": "rep.uk.smb.1",
+        "l001_writes": 0,
+        "stale_412_refusals": 1,
+        "old_approval_refused": [
+          "hash_mismatch"
+        ],
+        "replanned_decision": "keep_owner",
+        "replanned_rule": "R04_EXISTING_OWNER",
+        "l001_status": "pending_approval"
+      },
+      "baseline": null,
+      "seconds": 0.58
+    },
+    {
+      "id": "F10",
+      "name": "review file edited, then approved",
+      "expect": "executor refuses: approval hash differs from the stored plan",
+      "passed": true,
+      "runtime": {
+        "l002_writes": 0,
+        "refusals": [
+          "hash_mismatch"
+        ]
+      },
+      "baseline": null,
+      "seconds": 0.38
+    },
+    {
+      "id": "F11",
+      "name": "approval older than the 24h TTL",
+      "expect": "refused as expired; no writes",
+      "passed": true,
+      "runtime": {
+        "writes": 0,
+        "refusals": [
+          "approval_expired"
+        ]
+      },
+      "baseline": null,
+      "seconds": 0.37
+    },
+    {
+      "id": "F12",
+      "name": "agent identity approves (CLI and forged file)",
+      "expect": "CLI refuses; executor refuses forged file; no writes",
+      "passed": true,
+      "runtime": {
+        "cli_exit": 1,
+        "cli_output": "REFUSED: agent or service identity cannot approve: agent:worker",
+        "writes": 0,
+        "refusals": [
+          "approver_refused:agent or service identity cannot approve: agent:worker"
+        ]
+      },
+      "baseline": null,
+      "seconds": 0.41
+    },
+    {
+      "id": "F13",
+      "name": "approval quotes a 12-character hash prefix",
+      "expect": "CLI refuses",
+      "passed": true,
+      "runtime": {
+        "cli_exit": 1,
+        "cli_output": "REFUSED: quote the full 64-character plan hash, not a prefix"
+      },
+      "baseline": null,
+      "seconds": 0.3
+    },
+    {
+      "id": "F14",
+      "name": "CRM token secret missing",
+      "expect": "worker refuses to start (exit 3); zero requests",
+      "passed": true,
+      "runtime": {
+        "exit": 3,
+        "requests": 0,
+        "message_ok": true
+      },
+      "baseline": null,
+      "seconds": 0.11
+    },
+    {
+      "id": "F15",
+      "name": "wrong CRM token",
+      "expect": "401 not retried; no writes; token not in logs",
+      "passed": true,
+      "runtime": {
+        "exit": 0,
+        "requests": 1,
+        "unauthorised": 1,
+        "writes": 0,
+        "token_in_logs": false
+      },
+      "baseline": {
+        "requests": 5,
+        "unauthorised": 5,
+        "log_lines_with_token": 5
+      },
+      "seconds": 0.11
+    },
+    {
+      "id": "F16",
+      "name": "prompt injection in message and title (L007, L012)",
+      "expect": "owner not the injected one; injected text absent from task and Slack text",
+      "passed": true,
+      "runtime": {
+        "L007_owner": "rep.na.mm.1",
+        "L012_owner": "rep.uk.mm.1",
+        "L007_warnings": [
+          "quarantined:message:override_instructions",
+          "quarantined:message:routing_instruction"
+        ],
+        "L012_warnings": [
+          "quarantined:title:field_instruction",
+          "quarantined:title:markup_injection"
+        ],
+        "injected_text_in_outputs": 0
+      },
+      "baseline": null,
+      "seconds": 0.59
+    },
+    {
+      "id": "F17",
+      "name": "re-run with nothing changed",
+      "expect": "zero new effects; zero new plans",
+      "passed": true,
+      "runtime": {
+        "new_writes": 0,
+        "new_plans": 0
+      },
+      "baseline": {
+        "duplicate_effects": 13,
+        "writes": 47
+      },
+      "seconds": 0.7
+    },
+    {
+      "id": "F18",
+      "name": "torn final audit line after a crash",
+      "expect": "tail moved to audit.torn.jsonl; chain verifies",
+      "passed": true,
+      "runtime": {
+        "before_repair": "line 33: not JSON (torn or edited)",
+        "after": "35 records, chain intact",
+        "torn_file": true
+      },
+      "baseline": null,
+      "seconds": 0.29
+    },
+    {
+      "id": "F19",
+      "name": "healthcheck: fresh, stale, fatal, stopped, missing heartbeat",
+      "expect": "0, 1, 1, 1, 1",
+      "passed": true,
+      "runtime": {
+        "fresh": 0,
+        "stale": 1,
+        "fatal": 1,
+        "stopped": 1,
+        "missing": 1
+      },
+      "baseline": null,
+      "seconds": 0.51
+    },
+    {
+      "id": "F20",
+      "name": "lead changes while waiting for approval",
+      "expect": "re-planned with a new hash; approval of the old hash refused; no writes for that lead",
+      "passed": true,
+      "runtime": {
+        "old_hash": "143d2b7f7b75",
+        "new_hash": "da3fd99dd8bf",
+        "new_rule": "R05_TERRITORY_UK_ENT",
+        "l002_writes": 0,
+        "refusals": [
+          "hash_mismatch"
+        ],
+        "replan_events": 1
+      },
+      "baseline": null,
+      "seconds": 0.31
+    },
+    {
+      "id": "F21",
+      "name": "external SIGTERM while sleeping in backoff",
+      "expect": "exit 0 within 5 s; clean-stop marker",
+      "passed": true,
+      "runtime": {
+        "exit": 0,
+        "seconds_to_exit": 0.02,
+        "run_state": "stopped_clean"
+      },
+      "baseline": null,
+      "seconds": 0.36
+    },
+    {
+      "id": "F22",
+      "name": "secret bytes in logs or state across all scenarios",
+      "expect": "0",
+      "passed": true,
+      "runtime": {
+        "environments_checked": 31,
+        "leaks": 0
+      },
+      "baseline": null,
+      "seconds": 0.01
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+domain,account_id,name,employees,owner_id,named_account,open_opportunity,territory
+lumen-pipeline.example,A100,Lumen Pipeline (synthetic),140,,false,false,UK
+acme-textiles.example,A101,Acme Textiles (synthetic),80,,false,false,UK
+kestrel-health.example,A102,Kestrel Health (synthetic),3200,rep.uk.ent.1,true,false,UK
+nordwerk.example,A103,Nordwerk AG (synthetic),2400,rep.dach.ent.1,true,true,DACH
+harbourline.example,A104,Harbourline Logistics (synthetic),350,,false,false,NA
+alpenrot.example,A105,Alpenrot (synthetic),620,,false,false,DACH
+quarry-ai.example,A106,Quarry AI (synthetic),5000,,false,false,NA
+freemail.example,A900,Freemail provider (synthetic; must never match),99999,rep.fr.mm.1,true,false,FR

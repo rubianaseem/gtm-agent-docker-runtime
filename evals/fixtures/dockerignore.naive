@@ -1,0 +1,2 @@
+# Synthetic naive .dockerignore used as the lint baseline.
+__pycache__

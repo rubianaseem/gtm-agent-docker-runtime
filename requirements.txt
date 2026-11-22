@@ -1,0 +1,2 @@
+# Standard library only. Nothing to install for the default (no API key) path.
+# The optional Claude call uses urllib from the standard library too.

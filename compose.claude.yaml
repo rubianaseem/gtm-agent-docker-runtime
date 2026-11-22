@@ -1,0 +1,11 @@
+# Optional override: gives the worker outbound internet so the optional Claude
+# summary can reach api.anthropic.com. The default stack has no egress at all.
+# Use: docker compose -f compose.yaml -f compose.claude.yaml up
+services:
+  worker:
+    networks:
+      - gtm-internal
+      - egress
+
+networks:
+  egress: {}

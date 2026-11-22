@@ -1,0 +1,44 @@
+{
+  "blocking": [],
+  "crm_version": 1,
+  "decision": "assign",
+  "executable": true,
+  "lead_id": "L001",
+  "ops": [
+    {
+      "lead_id": "L001",
+      "op": "update_lead",
+      "set": {
+        "lead_status": "Assigned",
+        "owner_id": "rep.uk.mm.1"
+      }
+    },
+    {
+      "body": "Head of Sales Ops at Lumen Pipeline (synthetic) (MM, UK). Asked about: pricing, trial.",
+      "due": "2026-11-23",
+      "lead_id": "L001",
+      "op": "create_task",
+      "owner_id": "rep.uk.mm.1",
+      "subject": "Follow up inbound lead L001"
+    },
+    {
+      "channel": "#lead-routing-mock",
+      "lead_id": "L001",
+      "op": "slack_notify",
+      "text": "[mock] L001 -> rep.uk.mm.1 (R05_TERRITORY_UK_MM, score 55). Head of Sales Ops at Lumen Pipeline (synthetic) (MM, UK). Asked about: pricing, trial."
+    }
+  ],
+  "owner_id": "rep.uk.mm.1",
+  "plan_hash": "33f5b79b22624023137031fc106e81ed94f43ec5950eeb889902033c0eab9aa4",
+  "rule": "R05_TERRITORY_UK_MM",
+  "rules_version": "routing-rules.v1",
+  "schema": "plan.v1",
+  "score": 55,
+  "score_reasons": [
+    "mid-market size +25",
+    "known account +15",
+    "source web_form +15"
+  ],
+  "summary_source": "template",
+  "warnings": []
+}

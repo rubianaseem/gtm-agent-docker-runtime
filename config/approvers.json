@@ -1,0 +1,5 @@
+{
+  "_note": "Named humans who may approve plans. Synthetic names. Identities starting with agent:, bot: or svc: are always refused.",
+  "approvers": ["rubia.naseem", "revops.lead", "sales.manager.uk"],
+  "refused_prefixes": ["agent:", "bot:", "svc:", "worker"]
+}

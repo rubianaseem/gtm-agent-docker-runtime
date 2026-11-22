@@ -1,0 +1,20 @@
+# Keep secrets, local state and dev files out of the build context.
+.git
+.gitignore
+.env
+.env.*
+secrets/
+state/
+outputs/
+.venv/
+venv/
+**/__pycache__
+**/*.pyc
+tests/
+evals/
+docs/
+tools/
+*.md
+compose*.yaml
+Dockerfile
+.dockerignore

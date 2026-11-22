@@ -1,0 +1,47 @@
+## 1. Worker starts, plans every lead, then gets SIGTERM (like docker stop)
+  plans ready after 1.2s
+  healthcheck while running: exit 0, ok (heartbeat 0s, status running)
+  SIGTERM to exit: 0.02s
+  {"level": "info", "event": "secret_loaded", "secret": "CRM_TOKEN", "source": "file:CRM_TOKEN_FILE", "length": 43}
+  {"level": "info", "event": "shutdown_requested", "signal": "SIGTERM"}
+  {"level": "info", "event": "worker_stopped", "reason": "stop_signal", "steps": 70, "executed_ops": 0, "replayed_ops": 0, "stale": 0, "errors": 0}
+  exit code 0
+
+## 2. Review queue (python -m runtime queue)
+  L001  pending_approval  assign     R05_TERRITORY_UK_MM    rep.uk.mm.1     blocking=-  warnings=-
+  L002  pending_approval  assign     R05_TERRITORY_UK_SMB   rep.uk.smb.2    blocking=-  warnings=-
+  L003  needs_review      review     R00_DUPLICATE          -               blocking=duplicate_of:L001  warnings=-
+  L004  pending_approval  assign     R03_NAMED_ACCOUNT      rep.uk.ent.1    blocking=-  warnings=-
+  L005  needs_review      review     R09_NEEDS_HUMAN        -               blocking=account_owner_inactive:rep.dach.ent.1  warnings=-
+  L006  needs_review      review     R09_NEEDS_HUMAN        -               blocking=no_active_rep:FR/ENT  warnings=free_mail_domain
+  L007  pending_approval  assign     R05_TERRITORY_NA_MM    rep.na.mm.1     blocking=-  warnings=quarantined:message:override_instructions,quarantined:message:routing_instruction
+  L008  pending_approval  disqualify R01_SPAM_OR_TEST       -               blocking=-  warnings=spam_or_test
+  L009  needs_review      review     R09_NEEDS_HUMAN        -               blocking=unknown_territory:blank  warnings=-
+  L010  pending_approval  assign     R05_TERRITORY_DACH_MM  rep.dach.mm.1   blocking=-  warnings=employee_band_upper_bound_used
+  L011  pending_approval  keep_owner R04_EXISTING_OWNER     rep.na.smb.1    blocking=-  warnings=-
+  L012  pending_approval  assign     R05_TERRITORY_UK_MM    rep.uk.mm.1     blocking=-  warnings=quarantined:title:field_instruction,quarantined:title:markup_injection
+  L013  pending_approval  assign     R05_TERRITORY_DACH_MM  rep.dach.mm.1   blocking=-  warnings=-
+  L014  pending_approval  assign     R05_TERRITORY_NA_ENT   rep.na.ent.1    blocking=-  warnings=no_marketing_consent_sales_follow_up_only
+
+## 3. Approvals bound to the full plan hash (demo runs these as rubia.naseem)
+  approve L001 as rubia.naseem with full hash: APPROVED L001 by rubia.naseem (hash 33f5b79b2262..., expires in 24h). The worker executes it against the mock services on its next cycle.
+  approve L004 as rubia.naseem with full hash: APPROVED L004 by rubia.naseem (hash 71ca90d29e29..., expires in 24h). The worker executes it against the mock services on its next cycle.
+  approve L007 as rubia.naseem with full hash: APPROVED L007 by rubia.naseem (hash cd4fa14b5f92..., expires in 24h). The worker executes it against the mock services on its next cycle.
+  approve L002 as agent:worker with full hash: REFUSED: agent or service identity cannot approve: agent:worker
+  approve L014 as rubia.naseem with 12-char prefix: REFUSED: quote the full 64-character plan hash, not a prefix
+
+## 4. Execute, with a SIGKILL injected right after L004's first write commits
+  first run exit code -9 (SIGKILL)
+  {"level": "warning", "event": "recovered_after_unclean_stop", "previous_pid": 29949}
+  {"level": "info", "event": "op_resend_same_key", "lead_id": "L004", "op": "update_lead", "op_index": 0}
+  {"level": "info", "event": "worker_stopped", "reason": "idle_once", "steps": 0, "executed_ops": 5, "replayed_ops": 1, "stale": 0, "errors": 0}
+  second run exit code 0
+
+## 5. What the mock CRM and mock Slack received
+  writes 9, duplicate effects 0, tasks 3, mock Slack messages 3
+  slack(mock) #lead-routing-mock: [mock] L001 -> rep.uk.mm.1 (R05_TERRITORY_UK_MM, score 55). Head of Sales Ops at Lumen Pipeline (synthetic) (MM, UK). Asked about: pricing, trial.
+  slack(mock) #lead-routing-mock: [mock] L004 -> rep.uk.ent.1 (R03_NAMED_ACCOUNT, score 70). Chief Revenue Officer at Kestrel Health (synthetic) (ENT, UK). Asked about: quote, seats.
+  slack(mock) #lead-routing-mock: [mock] L007 -> rep.na.mm.1 (R05_TERRITORY_NA_MM, score 55). Sales Ops Manager at Harbourline Logistics (synthetic) (MM, NA). Asked about: no clear ask.
+  lead status counts: {"executed": 3, "needs_review": 4, "pending_approval": 7}
+  audit chain: 54 records, chain intact
+  healthcheck after the worker exited: exit 1, worker status stopped

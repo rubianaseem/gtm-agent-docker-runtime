@@ -1,0 +1,24 @@
+{
+  "_note": "Synthetic routing rules for the demo. Territories, reps and domains are fictional.",
+  "version": "routing-rules.v1",
+  "country_to_territory": {
+    "gb": "UK", "uk": "UK", "united kingdom": "UK", "great britain": "UK", "england": "UK",
+    "scotland": "UK", "wales": "UK", "northern ireland": "UK",
+    "de": "DACH", "germany": "DACH", "deutschland": "DACH", "at": "DACH", "austria": "DACH",
+    "ch": "DACH", "switzerland": "DACH",
+    "fr": "FR", "france": "FR",
+    "us": "NA", "usa": "NA", "united states": "NA", "united states of america": "NA",
+    "ca": "NA", "canada": "NA"
+  },
+  "segments": [
+    {"name": "SMB", "min": 1, "max": 99},
+    {"name": "MM", "min": 100, "max": 999},
+    {"name": "ENT", "min": 1000, "max": 100000000}
+  ],
+  "free_mail_domains": ["freemail.example", "webmail.example", "mailbox.example"],
+  "disposable_domains": ["throwaway.example", "tempinbox.example"],
+  "test_name_tokens": ["test", "asdf", "qwerty", "xxx"],
+  "intent_keywords": ["demo", "pricing", "price", "quote", "trial", "integration", "security", "migration", "seats"],
+  "slack_channel": "#lead-routing-mock",
+  "task_due_business_days": 1
+}

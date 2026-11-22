@@ -46,10 +46,10 @@ python tools/make_dev_secrets.py && docker compose up --build   # with Docker
 
 ```text
   SIGTERM to exit: 0.02s
-  L007  pending_approval  assign  R05_TERRITORY_NA_MM  rep.na.mm.1  warnings=quarantined:message:override_instructions,...
+  L007  pending_approval  assign     R05_TERRITORY_NA_MM    rep.na.mm.1     blocking=-  warnings=quarantined:message:override_instructions,quarantined:message:routing_instruction
   approve L002 as agent:worker with full hash: REFUSED: agent or service identity cannot approve: agent:worker
   first run exit code -9 (SIGKILL)
-  {"event": "op_resend_same_key", "lead_id": "L004", "op": "update_lead", "op_index": 0}
+  {"level": "info", "event": "op_resend_same_key", "lead_id": "L004", "op": "update_lead", "op_index": 0}
   writes 9, duplicate effects 0, tasks 3, mock Slack messages 3
   audit chain: 54 records, chain intact
 ```
